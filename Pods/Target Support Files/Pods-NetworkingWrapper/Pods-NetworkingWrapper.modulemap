@@ -1,0 +1,6 @@
+framework module Pods_NetworkingWrapper {
+  umbrella header "Pods-NetworkingWrapper-umbrella.h"
+
+  export *
+  module * { export * }
+}
