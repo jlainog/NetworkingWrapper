@@ -6,11 +6,10 @@
 //  Copyright © 2017 Jaime Laino. All rights reserved.
 //
 
-public protocol Endpoint {
+public protocol RequestLine {
     associatedtype HttpMethod
     associatedtype ParameterEncoding
     
-    var cache : Bool { get }
     var httpMethod : HttpMethod { get }
     var path : String { get }
     var encoding : ParameterEncoding { get }

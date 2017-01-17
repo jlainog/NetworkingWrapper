@@ -3,16 +3,18 @@
  
  Example of the use of the NetworkingWrapper using Alamofire
  
+ [Http Request Documentation](https://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5)
+ 
  ## Features
  
- * A way to cleary identify the Host and the related Endpoints
+ * A way to cleary identify the Host and the related RequestLine
  * Custom configuration of each Host
- * Specify Path, HttpMethod and Encoding for each Endpoint
+ * Specify Path, HttpMethod and Encoding for each RequestLine
  * Easy set of Enviroments
 
 Lets say we want to reach a media service that expose info about Movies and TV Shows
  
- https://www.themoviedb.org/documentation/api
+ [The MovieDB API](https://www.themoviedb.org/documentation/api)
  
  ### General Features Movies
  * Top rated movies
@@ -27,54 +29,54 @@ Lets say we want to reach a media service that expose info about Movies and TV S
  */
 import PlaygroundSupport
 /*:
- Now we define and interface for the movies expected Endpoints
+ Now we define and interface for the movies expected RequestLine
  */
-protocol MoviesEndpoints {
-    static var nowPlaying : EndpointAlamofireImpl { get }
-    static var popular : EndpointAlamofireImpl { get }
-    static var topRated : EndpointAlamofireImpl { get }
-    static var upcoming : EndpointAlamofireImpl { get }
+protocol MoviesRequestLine {
+    static var nowPlaying : RequestLineAlamofireImpl { get }
+    static var popular : RequestLineAlamofireImpl { get }
+    static var topRated : RequestLineAlamofireImpl { get }
+    static var upcoming : RequestLineAlamofireImpl { get }
 }
 /*:
- Then we define the service with the Host and the related Endpoints
+ Then we define the service with the Host and the related RequestLine
  */
 struct TheMovieDB {
-    static let host = HostImpl(listRequest: [Environment.default : "https://api.themoviedb.org/3"])
+    static let host = HostImpl(listRequest: [Environment.default : "https://api.themoviedb.org/3"],
+                               parameters: ["api_key": "1f4d7de5836b788bdfd897c3e0d0a24b"])
     static let imgBaseURL =  "https://image.tmdb.org/t/p/w300"
     
-    struct MovieEndpoint : MoviesEndpoints {}
-    struct SeriesEndpoint { }
+    struct MovieRequestLines : MoviesRequestLine {}
+    struct SeriesRequestLines { }
 }
 /*:
- Implement the Endpoints
+ Implement the RequestLine
  */
-extension TheMovieDB.MovieEndpoint {
-    static let nowPlaying = EndpointAlamofireImpl(path: "/movie/now_playing",
+extension TheMovieDB.MovieRequestLines {
+    static let nowPlaying = RequestLineAlamofireImpl(path: "/movie/now_playing",
                                                   httpMethod: .get)
-    static let popular = EndpointAlamofireImpl(path: "/movie/popular")
-    static let topRated = EndpointAlamofireImpl(path: "/movie/top_rated")
-    static let upcoming = EndpointAlamofireImpl(path: "/movie/upcoming")
+    static let popular = RequestLineAlamofireImpl(path: "/movie/popular")
+    static let topRated = RequestLineAlamofireImpl(path: "/movie/top_rated")
+    static let upcoming = RequestLineAlamofireImpl(path: "/movie/upcoming")
 }
 
-extension TheMovieDB.SeriesEndpoint {
-    static let airingToday = EndpointAlamofireImpl(path: "/tv/airing_today")
-    static let onTheAir = EndpointAlamofireImpl(path: "/tv/on_the_air")
-    static let popular = EndpointAlamofireImpl(path: "/tv/popular")
-    static let topRated = EndpointAlamofireImpl(path: "/tv/top_rated")
+extension TheMovieDB.SeriesRequestLines {
+    static let airingToday = RequestLineAlamofireImpl(path: "/tv/airing_today")
+    static let onTheAir = RequestLineAlamofireImpl(path: "/tv/on_the_air")
+    static let popular = RequestLineAlamofireImpl(path: "/tv/popular")
+    static let topRated = RequestLineAlamofireImpl(path: "/tv/top_rated")
 }
 /*:
- Test the service baseURL given the Environment and Endpoints Paths
+ Test the service baseURL given the Environment and RequestLine Paths
  */
 TheMovieDB.host.baseURL()
-TheMovieDB.MovieEndpoint.topRated.path
-TheMovieDB.SeriesEndpoint.topRated.path
+TheMovieDB.MovieRequestLines.topRated.path
+TheMovieDB.SeriesRequestLines.topRated.path
 /*:
  Now connect all together.
  Declare a NetworkRequest passing the Host and the Endpoind.
  */
 let networkRequest = NetworkRequestAlamofireImpl(host: TheMovieDB.host,
-                                                 endpoint: TheMovieDB.MovieEndpoint.nowPlaying,
-                                                 parameters: ["api_key": "1f4d7de5836b788bdfd897c3e0d0a24b"])
+                                                 resquestLine: TheMovieDB.MovieRequestLines.nowPlaying)
 /*:
  Test the NetworkRequest absoluteURL
  */

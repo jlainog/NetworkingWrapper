@@ -15,6 +15,7 @@ public enum Environment {
 public struct HostImpl : Host {
     public let listRequest: [Environment : URLRequestConvertible]
     public let headers: [String : String]?
+    public let parameters: [String : String]?
     public var environment: Environment {
 //        User your Settings or Build Variables to assign the enviroment
 //        return Settings.sharedInstance.selectedEnvironment
@@ -22,8 +23,10 @@ public struct HostImpl : Host {
     }
     
     public init(listRequest: [Environment : URLRequestConvertible],
-         headers: [String : String]? = nil) {
+                headers: [String : String]? = nil,
+                parameters: [String : String]? = nil) {
         self.listRequest = listRequest
         self.headers = headers
+        self.parameters = parameters
     }
 }

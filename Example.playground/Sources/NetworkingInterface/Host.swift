@@ -10,6 +10,7 @@ public protocol Host {
     associatedtype Environment : Hashable
     
     var headers: [String : String]? { get }
+    var parameters: [String : String]? { get }
     var environment : Environment { get }
     var listRequest : [Environment : URLRequestConvertible] { get }
     func baseURL() -> String!

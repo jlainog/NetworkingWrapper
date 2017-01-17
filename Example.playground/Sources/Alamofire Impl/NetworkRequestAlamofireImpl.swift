@@ -11,17 +11,17 @@ import Alamofire
 
 public struct NetworkRequestAlamofireImpl : NetworkRequest {
     public let host : HostImpl
-    public let endpoint : EndpointAlamofireImpl
+    public let requestLine : RequestLineAlamofireImpl
     public let parameters : [String : Any]?
     public let headers : [String : String]?
     private let deserializerQueue = DispatchQueue.global()
     
     public init(host: HostImpl,
-                endpoint:EndpointAlamofireImpl,
+                resquestLine: RequestLineAlamofireImpl,
                 parameters: [String : Any]? = nil,
                 headers: [String : String]? = nil) {
         self.host = host
-        self.endpoint = endpoint
+        self.requestLine = resquestLine
         self.parameters = parameters
         self.headers = headers
     }
@@ -35,9 +35,9 @@ public struct NetworkRequestAlamofireImpl : NetworkRequest {
     
     private func alamofireRequest() -> Alamofire.DataRequest {
         return Alamofire.request(absoluteURL(),
-                                 method: endpoint.httpMethod,
-                                 parameters: parameters,
-                                 encoding: endpoint.encoding,
+                                 method: requestLine.httpMethod,
+                                 parameters: requestParams(),
+                                 encoding: requestLine.encoding,
                                  headers: requestHeaders())
     }
 }
